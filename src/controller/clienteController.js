@@ -57,4 +57,61 @@ exports.deletarCliente = async (req, res) => {
         console.error('Erro ao deletar cliente:', err);
         res.status(500).json({ error: 'Erro ao deletar cliente' });
     }
+
 };
+
+//Adicionar um novo cliente
+exports.adicionarCliente = async (req, res) => {
+    const { cpf, nome, endereco, bairro, cidade, telefone, senha } = req.body;
+
+
+    //Validação de dados
+    const { error } = clienteSchema.validate({ cpf, nome, endereco, bairro, cidade, telefone, senha });
+    if (error) {
+    return res.status(400),json({ error: error.details[0].message });
+  }
+
+try{
+    //Criptografando a senha
+    const hash = await bcrypt.hash(senha, 10);
+
+    const novoCliente = { cpf, nome, endereco, bairro, cidade, telefone, senha: hash };
+    await db.query('INSERT INTO cliente SET ?' ,novoCliente);
+
+    res.json({ message: 'Cliente adicionado com sucesso '});
+  } catch (err) {
+    console.log('Erro ao adicionar cliente:', err);
+    res.status(500).json({ error: 'Erro ao adicionar cliente' });
+
+  }
+};
+
+
+//Atualizar um cliente
+exports.atualizarCliente = async (req, res) => {
+    const { cpf } = req.params;
+    const {  nome, endereco, bairro, cidade, telefone, senha} = req.body;
+
+    //Validação de dados
+    const { error } = clienteSchema.validate({ cpf, nome, endereco, bairro, cidade, telefone, senha });
+    if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+    }
+
+    try {
+        //Criptografando a senha
+        const hash = await bcrypt.hash(senha, 10);
+
+        const clienteAtualizado = {nome, endereco, bairro, cidade, telefone, senha: hash };
+        await db.query('UPDATE cliente SET ? WHERE cpf = ?', [clienteAtualizado, cpf]);
+
+        res.json({ message: 'Cliente atualizado com sucesso' });
+
+    } catch (err) {
+        console.error('Erro ao atualizar cliente:', err);
+        res.status(500).json({ error: 'Erro ao atualizar cliente' });
+    }
+};
+
+
+//

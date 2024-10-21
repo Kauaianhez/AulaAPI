@@ -10,6 +10,7 @@ const routes = require('./routes/routes');
 const db = require('./db/db'); // Módulo de conexão com o banco de dados
 const { METHODS } = require('http');
 
+const clienteRoutes = require('./routes/clienteroutes'); //Importa as rotas de clientes
 
 const corsOptions = {
     origin: ['http://localhost:3333', 'https://meudominio.com'], //Lista de origens permitidas
@@ -40,6 +41,7 @@ app.get('/', (req, res) => {
 
 //Configuração de rotas
 app.use('/', routes);
+app.use('/', clienteRoutes); //Usa as rotas de clientes sob o caminho /api/clientes
 
 //Middleware de tratamento de erros
 app.use((err, req, res, next) => {
