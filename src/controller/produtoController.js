@@ -23,10 +23,10 @@ exports.listarProdutos = async (req, res) => {
 
 //Buscar um único produto por ID
 exports.buscarProdutoId = async (req, res) => {
-    const { id } = req.params;
+    const { codigoProduto } = req.params;
 
     try {
-        const [result] = await db.query('SELECT * FROM produto WHERE codigoProduto = ?', [id]);
+        const [result] = await db.query('SELECT * FROM produto WHERE codigoProduto = ?', [codigoProduto]);
         if  (result.length === 0) {
             return res.status(404).json({ error: 'Produto não encontrado' });
         }
@@ -39,9 +39,9 @@ exports.buscarProdutoId = async (req, res) => {
 
 //Buscar produtos por nome
 exports.buscarProdutoNome = async (req, res) => {
-    const { nome_produto } = req.params;
+    const { nomeProduto } = req.params;
     try {
-        const [result] = await db.query('SELECT * FROM produto WHERE nomeProduto LIKE ?', [`${nome_produto}%`]);
+        const [result] = await db.query('SELECT * FROM produto WHERE nomeProduto LIKE ?', [`${nomeProduto}%`]);
         if (result.length === 0) {
             return res.status(404).json({ error: 'Produto não encontrado' });
         }
@@ -73,7 +73,7 @@ exports.adicionarProduto = async (req, res) => {
 
 //Atualizar um produto
 exports.atualizarProduto = async (req, res) => {
-    const { id } = req.params;
+    const { codigoProduto } = req.params;
     const { nomeProduto, descricao, valorUnit, imagem } = req.body;
 
     //Validação dos dados com Joi
@@ -83,7 +83,7 @@ exports.atualizarProduto = async (req, res) => {
     }
     const produtoAtualizado = { nomeProduto, descricao, valorUnit, imagem };
     try {
-        await db.query('UPDATE produto SET ? WHERE codigoProduto = ?', [produtoAtualizado, id]);
+        await db.query('UPDATE produto SET ? WHERE codigoProduto = ?', [produtoAtualizado, codigoProduto]);
         res.json({ message: 'Produto atualizado com sucesso' });
     } catch (err) {
         console.error('Erro ao atualizar produto:', err);
@@ -93,10 +93,10 @@ exports.atualizarProduto = async (req, res) => {
 
 //Deletar um produto
 exports.deletarProduto = async (req, res) => {
-    const { id } = req.params;
+    const { codigoProduto } = req.params;
 
     try {
-        await db.query('DELETE FROM produto WHERE codigoProduto = ?', [id]);
+        await db.query('DELETE FROM produto WHERE codigoProduto = ?', [codigoProduto]);
         res.json({ message: 'Produto deletado com sucesso' });
     } catch (err) {
         console.error('Erro ao deletar produto:', err);

@@ -13,12 +13,12 @@ router.get('/produto/:codigoProduto', produtoControler.buscarProdutoId);
 router.get('/produto/nome/:nomeProduto', produtoControler.buscarProdutoNome);
 
 //Rota para adicionar um novo produto
-router.get('/produto', produtoControler.adicionarProduto);
+router.post('/produto', produtoControler.adicionarProduto);
 
 //Rota para atualizar um produto por ID
-router.get('/produto/:codigoProduto', produtoControler.atualizarProduto);
+router.put('/produto/:codigoProduto', produtoControler.atualizarProduto);
 
 //Rota para deletar um produto por ID
-router.get('/produto/:codigoProduto', produtoControler.deletarProduto);
+router.delete('/produto/:codigoProduto', produtoControler.deletarProduto);
 
 module.exports = router;

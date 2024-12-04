@@ -14,6 +14,8 @@ const clienteRoutes = require('./routes/clienteroutes'); //Importa as rotas de c
 
 const produtoRoutes = require('./routes/produtoroutes');
 
+const loginRoutes = require('./routes/loginroutes');
+
 const corsOptions = {
     origin: ['http://localhost:3333', 'https://meudominio.com'], //Lista de origens permitidas
     methods: 'GET,POST,PUT,DELETE', //Métodos HTTP permitidos
@@ -45,6 +47,7 @@ app.get('/', (req, res) => {
 app.use('/', routes);
 app.use('/', clienteRoutes); //Usa as rotas de clientes sob o caminho /api/clientes
 app.use('/', produtoRoutes);
+app.use('/', loginRoutes);
 
 //Middleware de tratamento de erros
 app.use((err, req, res, next) => {
